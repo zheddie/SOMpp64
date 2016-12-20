@@ -40,12 +40,16 @@ VMObject::VMObject( int numberOfFields ) {
     //FIELDS = (pVMObject*)&clazz; 
     this->SetNumberOfFields(numberOfFields + VMObjectNumberOfFields);
     gcfield = 0; 
-	hash = (int32_t)this;
+
+//    int32_t  low  =(int32_t) ((uintptr_t)this & 0xFFFF);
+//    int32_t high = (int32_t) ((uintptr_t)this >>32);
+//    hash = low+high;
+	hash =(uintptr_t) this;
     //Object size is set by the heap
 }
 
 
-void VMObject::SetNumberOfFields(int nof) {
+void VMObject::SetNumberOfFields(uintptr_t nof) {
     this->numberOfFields = nof;
 
     for (int i = 0; i < nof ; ++i) {
@@ -91,11 +95,11 @@ int VMObject::GetFieldIndex(pVMSymbol fieldName) const {
     return this->clazz->LookupFieldIndex(fieldName);
 }
 
-int VMObject::GetNumberOfFields() const {
+uintptr_t VMObject::GetNumberOfFields() const {
     return this->numberOfFields;
 }
 
-int32_t VMObject::GetObjectSize() const {
+uintptr_t VMObject::GetObjectSize() const {
     return objectSize;
 }
 

@@ -27,7 +27,8 @@
 # THE SOFTWARE.
 
 CC			=g++
-CFLAGS		=-Wno-endif-labels -O3 $(DBG_FLAGS) $(INCLUDES)
+#CFLAGS		=-Wno-endif-labels -O3 $(DBG_FLAGS) $(INCLUDES)
+CFLAGS		=-Wno-endif-labels $(DBG_FLAGS) $(INCLUDES)
 LDFLAGS		=$(LIBRARIES)
 
 SHAREDFLAGS =-fPIC -mmacosx-version-min=10.4 -undefined dynamic_lookup \
@@ -41,7 +42,8 @@ CORE_LIBS	=-lm
 CSOM_NAME	=SOM++
 CORE_NAME	=SOMCore
 PRIMITIVESCORE_NAME  =PrimitiveCore
-SHARED_EXTENSION    =dll
+#SHARED_EXTENSION    =dll
+SHARED_EXTENSION    =dynlib
 
 ############ global stuff -- overridden by ../Makefile
 
@@ -114,7 +116,8 @@ SOURCES			=  $(COMPILER_SRC) $(INTERPRETER_SRC) $(MEMORY_SRC) \
 ############# Things to clean
 
 CLEAN			= $(OBJECTS) \
-				$(DIST_DIR) $(DEST_DIR) CORE SOM++
+				$(DIST_DIR) $(DEST_DIR) CORE SOM++ \
+			$(CSOM_NAME).$(SHARED_EXTENSION)  $(PRIMITIVESCORE_NAME).$(SHARED_EXTENSION) $(ST_DIR)/$(CORE_NAME).csp
 ############# Tools
 
 #OSTOOL			= $(BUILD_DIR)/ostool

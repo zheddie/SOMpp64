@@ -87,7 +87,7 @@ void GarbageCollector::Collect() {
                 ++numFreed;
                 int freedBytes = curObject->GetObjectSize();
                 spcFreed += freedBytes;
-                memset(curObject, 0, freedBytes);
+                memset((void *)curObject, 0, freedBytes);
 
                 //mark object as unused
                 curObject->SetGCField(-1);
@@ -154,8 +154,8 @@ void GarbageCollector::mergeFreeSpaces() {
     VMFreeObject* last = NULL;
 	heap->sizeOfFreeHeap = 0;
 	while (currentEntry->GetNext() != NULL) {
-		if((int)currentEntry + (int)currentEntry->GetObjectSize() == 
-                                        (int)currentEntry->GetNext()) {
+		if((uintptr_t)currentEntry + (uintptr_t)currentEntry->GetObjectSize() ==
+                                        (uintptr_t)currentEntry->GetNext()) {
             int newEntrySize = currentEntry->GetObjectSize() +
                                         currentEntry->GetNext()->GetObjectSize();
 			currentEntry->SetObjectSize(newEntrySize);

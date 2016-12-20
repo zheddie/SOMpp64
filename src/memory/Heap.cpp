@@ -172,7 +172,7 @@ void* Heap::Allocate(size_t size) {
         int oldSize = cur->GetObjectSize();
         VMFreeObject* oldNext = cur->GetNext();
         result = cur;
-        VMFreeObject* replaceEntry = (VMFreeObject*) ((int)cur + size);
+        VMFreeObject* replaceEntry = (VMFreeObject*) ((uintptr_t)cur + size);
         replaceEntry->SetObjectSize(oldSize - size);
         replaceEntry->SetGCField(-1);
         replaceEntry->SetNext(oldNext);
@@ -198,7 +198,7 @@ void* Heap::Allocate(size_t size) {
         _UNIVERSE->ErrorExit("Failed to allocate");
     }
 
-    memset(result, 0, size);
+    memset((void *)result, 0, size);
     result->SetObjectSize(size);
     this->sizeOfFreeHeap -= size;
 
@@ -221,8 +221,8 @@ void Heap::FullGC() {
 }
 
 void Heap::Free(void* ptr) {
-    if ( ((int)ptr < (int) this->objectSpace) &&
-        ((int)ptr > (int) this->objectSpace + this->objectSpaceSize)) {
+    if ( ((uintptr_t)ptr < (uintptr_t) this->objectSpace) &&
+        ((uintptr_t)ptr > (uintptr_t) this->objectSpace + this->objectSpaceSize)) {
         internalFree(ptr);
     }
 }
@@ -230,11 +230,11 @@ void Heap::Free(void* ptr) {
 void Heap::Destroy(VMObject* _object) {
     
     int freedBytes = _object->GetObjectSize();
-    memset(_object, 0, freedBytes);
+    memset((void *)_object, 0, freedBytes);
     VMFreeObject* object = (VMFreeObject*) _object;
 
     //see if there's an adjoining unused object behind this object
-    VMFreeObject* next = (VMFreeObject*)((int)object + (int)freedBytes);
+    VMFreeObject* next = (VMFreeObject*)((uintptr_t)object + (int)freedBytes);
     if (next->GetGCField() == -1) {
         //yes, there is, so we can join them
         object->SetObjectSize(next->GetObjectSize() + freedBytes);
@@ -242,7 +242,7 @@ void Heap::Destroy(VMObject* _object) {
         next->GetNext()->SetPrevious(object);
         VMFreeObject* previous = next->GetPrevious();
         object->SetPrevious(previous);
-        memset(next, 0, next->GetObjectSize());
+        memset((void *)next, 0, next->GetObjectSize());
     } else {
         //no, there is not, so we just put the new unused object as the new freeListStart
         object->SetObjectSize(freedBytes);

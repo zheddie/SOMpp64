@@ -69,8 +69,8 @@ public:
 	virtual void        SetClass(pVMClass cl);
 	virtual pVMSymbol   GetFieldName(int index) const; 
 	virtual int         GetFieldIndex(pVMSymbol fieldName) const;
-	virtual int         GetNumberOfFields() const;
-	virtual void        SetNumberOfFields(int nof);
+	virtual uintptr_t         GetNumberOfFields() const;
+	virtual void        SetNumberOfFields(uintptr_t nof);
 	virtual int         GetDefaultNumberOfFields() const;
 	virtual void        Send(StdString, pVMObject*, int);
 	virtual pVMObject   GetField(int index) const;
@@ -81,8 +81,8 @@ public:
     virtual void        IncreaseGCCount() {};
     virtual void        DecreaseGCCount() {};
 
-    int32_t     GetHash() const { return hash; };
-    int32_t     GetObjectSize() const;
+    uintptr_t     GetHash() const { return hash; };
+    uintptr_t     GetObjectSize() const;
 	int32_t     GetGCField() const;
 	void        SetGCField(int32_t value);
     void        SetObjectSize(size_t size);
@@ -117,9 +117,9 @@ public:
 protected:
     int GetAdditionalSpaceConsumption() const;
     //VMObject essentials
-	int32_t     hash;
-    int32_t     objectSize; //set by the heap at allocation time
-    int32_t     numberOfFields;
+	uintptr_t     hash;
+	uintptr_t     objectSize; //set by the heap at allocation time
+    uintptr_t     numberOfFields;
     int32_t     gcfield;
 
     //pVMObject* FIELDS;

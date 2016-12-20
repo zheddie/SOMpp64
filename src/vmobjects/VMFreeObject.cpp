@@ -33,7 +33,7 @@ VMFreeObject::VMFreeObject() : VMObject(0) {
 }
 
 void VMFreeObject::SetNext(VMFreeObject* next) {
-    this->hash = (int32_t) next;
+    this->hash = (uintptr_t) next;
 }
 
 VMFreeObject* VMFreeObject::GetNext() {
@@ -41,7 +41,7 @@ VMFreeObject* VMFreeObject::GetNext() {
 }
 
 void VMFreeObject::SetPrevious(VMFreeObject* prev) {
-    this->numberOfFields = (int32_t)prev;
+    this->numberOfFields = (uintptr_t)prev;
 }
 
 VMFreeObject* VMFreeObject::GetPrevious() {
