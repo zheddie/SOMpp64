@@ -62,7 +62,7 @@ VMString::VMString( const StdString& s ): VMObject(VMStringNumberOfFields) {
 int VMString::GetStringLength() const {
     //get the additional memory allocated by this object and substract one
     //for the '0' character and four for the char*
-    return this->GetAdditionalSpaceConsumption() - 4 - 1;
+    return this->GetAdditionalSpaceConsumption() - sizeof(uintptr_t) - 1;
 }
 
 
